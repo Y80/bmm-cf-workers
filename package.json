@@ -1,0 +1,17 @@
+{
+  "name": "bmm-cf-workers",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy --minify"
+  },
+  "dependencies": {
+    "hono": "^4"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4",
+    "typescript": "^6",
+    "wrangler": "^4"
+  },
+  "packageManager": "pnpm@11.1.0"
+}
