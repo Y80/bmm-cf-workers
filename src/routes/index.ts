@@ -24,9 +24,9 @@ home.get('/', (c) => {
             GET /test-url?url=https://example.com
           </code>
           <pre class="bg-gray-100 rounded p-3 text-sm text-gray-800">{
-  "ok": true,
-  "httpCode": 200,
-  "msg": "OK"
+  "reachable": true,
+  "status": 200,
+  "statusText": "OK"
 }</pre>
         </div>
 

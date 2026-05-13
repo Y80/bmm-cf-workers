@@ -10,14 +10,26 @@ const testUrl = new Hono()
 testUrl.get('/test-url', async (c) => {
   const result = querySchema.safeParse(c.req.query())
   if (!result.success) {
-    return c.json({ ok: false, httpCode: 0, msg: result.error.issues[0].message })
+    return c.json({ reachable: false, error: result.error.issues[0].message })
   }
 
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), 10_000)
+
   try {
-    const res = await fetch(result.data.url, { method: 'HEAD', redirect: 'follow' })
-    return c.json({ ok: res.ok, httpCode: res.status, msg: res.statusText })
+    const res = await fetch(result.data.url, {
+      method: 'HEAD',
+      redirect: 'follow',
+      signal: controller.signal,
+    })
+    return c.json({ reachable: true, status: res.status, statusText: res.statusText })
   } catch (err) {
-    return c.json({ ok: false, httpCode: 0, msg: String(err) })
+    const msg = err instanceof DOMException && err.name === 'AbortError'
+      ? 'Timeout'
+      : String(err)
+    return c.json({ reachable: false, error: msg })
+  } finally {
+    clearTimeout(timer)
   }
 })
 
