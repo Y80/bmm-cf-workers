@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import { z } from 'zod'
+import { to } from '../utils/to'
 
 const querySchema = z.object({
   url: z.url(),
@@ -16,21 +17,19 @@ testUrl.get('/test-url', async (c) => {
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), 10_000)
 
-  try {
-    const res = await fetch(result.data.url, {
-      method: 'HEAD',
-      redirect: 'follow',
-      signal: controller.signal,
-    })
-    return c.json({ reachable: true, status: res.status, statusText: res.statusText })
-  } catch (err) {
+  const [err, res] = await to(
+    fetch(result.data.url, { method: 'HEAD', redirect: 'follow', signal: controller.signal }),
+  )
+  clearTimeout(timer)
+
+  if (err) {
     const msg = err instanceof DOMException && err.name === 'AbortError'
       ? 'Timeout'
       : String(err)
     return c.json({ reachable: false, error: msg })
-  } finally {
-    clearTimeout(timer)
   }
+
+  return c.json({ reachable: true, status: res.status, statusText: res.statusText })
 })
 
 export default testUrl

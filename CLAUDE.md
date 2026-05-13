@@ -17,6 +17,7 @@ Cloudflare Worker API 服务，基于 Hono 框架，使用 pnpm + TypeScript + W
 - **入口**: `src/index.ts` — 创建 Hono 实例，挂载所有路由子模块
 - **路由**: `src/routes/` 下每个文件是一个独立的 Hono 子应用，通过 `app.route('/', ...)` 挂载到根路径
 - **新增路由**: 在 `src/routes/` 创建文件，导出 Hono 实例，在 `src/index.ts` 中导入并挂载
+- **工具函数**: `src/utils/to.ts` — `to(promise)` 将 Promise 转为 `[err, data]` 元组，替代 try-catch
 - **无绑定**: 未配置 KV/D1/R2 等 Cloudflare 绑定
 - **无测试/lint/CI**
 
