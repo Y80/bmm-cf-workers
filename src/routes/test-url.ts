@@ -14,18 +14,27 @@ const querySchema = z
   })
   .refine((q) => q.url || q.host, { message: 'Missing url or host parameter' })
 
-/** 成功响应 */
-interface SuccessResponse {
+/** 2xx 响应 */
+interface OkResponse {
   ok: true
   status: number
   statusText: string
 }
 
-/** 失败响应 */
-interface ErrorResponse {
+/** 非2xx响应（服务器有响应，但状态码异常） */
+interface HttpErrorResponse {
+  ok: false
+  status: number
+  statusText: string
+}
+
+/** 网络错误（超时、DNS 失败等，无 HTTP 响应） */
+interface NetworkErrorResponse {
   ok: false
   error: string
 }
+
+type TestUrlResponse = OkResponse | HttpErrorResponse | NetworkErrorResponse
 
 const testUrl = new Hono()
 
@@ -33,12 +42,16 @@ const testUrl = new Hono()
  * 检测目标 URL 是否可访问
  * 向目标发起 HEAD 请求（模拟 Chrome 浏览器），10s 超时
  * 支持 url（完整地址）或 host（域名，拼接 https://）参数，优先 url
- * 仅请求成功且响应 2xx 时 ok 为 true
+ *
+ * 响应结构：
+ * - ok + status → 请求成功且 2xx
+ * - ok:false + status → 请求成功但非 2xx
+ * - ok:false + error → 网络错误（超时/DNS 等）
  */
 testUrl.get('/test-url', async (c) => {
   const result = querySchema.safeParse(c.req.query())
   if (!result.success) {
-    return c.json<ErrorResponse>({ ok: false, error: result.error.issues[0].message })
+    return c.json<NetworkErrorResponse>({ ok: false, error: result.error.issues[0].message })
   }
 
   const target = result.data.url ?? `https://${result.data.host}`
@@ -49,14 +62,14 @@ testUrl.get('/test-url', async (c) => {
 
   if (err) {
     const msg = err instanceof TimeoutError ? 'Timeout' : String(err)
-    return c.json<ErrorResponse>({ ok: false, error: msg })
+    return c.json<NetworkErrorResponse>({ ok: false, error: msg })
   }
 
   if (!res.ok) {
-    return c.json<ErrorResponse>({ ok: false, error: res.statusText || `HTTP ${res.status}` })
+    return c.json<HttpErrorResponse>({ ok: false, status: res.status, statusText: res.statusText })
   }
 
-  return c.json<SuccessResponse>({ ok: true, status: res.status, statusText: res.statusText })
+  return c.json<OkResponse>({ ok: true, status: res.status, statusText: res.statusText })
 })
 
 export default testUrl
