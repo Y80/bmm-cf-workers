@@ -1,3 +1,6 @@
 name = "bmm-cf-workers"
 main = "src/index.ts"
 compatibility_date = "2024-12-01"
+
+[assets]
+directory = "public"

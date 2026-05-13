@@ -56,9 +56,7 @@ testUrl.get('/test-url', async (c) => {
 
   const target = result.data.url ?? `https://${result.data.host}`
 
-  const [err, res] = await to(
-    http.head(target, { redirect: 'follow', timeout: 10_000, throwHttpErrors: false }),
-  )
+  const [err, res] = await to(http.head(target, { redirect: 'follow', timeout: 10_000, throwHttpErrors: false }))
 
   if (err) {
     const msg = err instanceof TimeoutError ? 'Timeout' : String(err)
