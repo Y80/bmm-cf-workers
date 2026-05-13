@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import ky, { TimeoutError } from 'ky'
 import { z } from 'zod'
 import { to } from '../utils/to'
 import { http } from '../utils/http'
@@ -37,16 +38,12 @@ testUrl.get('/test-url', async (c) => {
     return c.json<ErrorResponse>({ reachable: false, error: result.error.issues[0].message })
   }
 
-  const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), 10_000)
-
   const [err, res] = await to(
-    http.head(result.data.url, { redirect: 'follow', signal: controller.signal, throwHttpErrors: false }),
+    http.head(result.data.url, { redirect: 'follow', timeout: 10_000, throwHttpErrors: false }),
   )
-  clearTimeout(timer)
 
   if (err) {
-    const msg = err instanceof DOMException && err.name === 'AbortError' ? 'Timeout' : String(err)
+    const msg = err instanceof TimeoutError ? 'Timeout' : String(err)
     return c.json<ErrorResponse>({ reachable: false, error: msg })
   }
 
