@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
 import { z } from 'zod'
 import { to } from '../utils/to'
+import { http } from '../utils/http'
 
 /** 查询参数 */
 const querySchema = z.object({
@@ -27,7 +28,7 @@ const testUrl = new Hono()
 
 /**
  * 检测目标 URL 是否可访问
- * 向目标发起 HEAD 请求，10s 超时
+ * 向目标发起 HEAD 请求（模拟 Chrome 浏览器），10s 超时
  * 返回可达状态及 HTTP 状态码
  */
 testUrl.get('/test-url', async (c) => {
@@ -40,14 +41,12 @@ testUrl.get('/test-url', async (c) => {
   const timer = setTimeout(() => controller.abort(), 10_000)
 
   const [err, res] = await to(
-    fetch(result.data.url, { method: 'HEAD', redirect: 'follow', signal: controller.signal }),
+    http(result.data.url, { method: 'head', redirect: 'follow', signal: controller.signal, throwHttpErrors: false }),
   )
   clearTimeout(timer)
 
   if (err) {
-    const msg = err instanceof DOMException && err.name === 'AbortError'
-      ? 'Timeout'
-      : String(err)
+    const msg = err instanceof DOMException && err.name === 'AbortError' ? 'Timeout' : String(err)
     return c.json<ErrorResponse>({ reachable: false, error: msg })
   }
 
