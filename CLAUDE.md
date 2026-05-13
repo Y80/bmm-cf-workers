@@ -18,6 +18,8 @@ Cloudflare Worker API 服务，基于 Hono 框架，使用 pnpm + TypeScript + W
 - **路由**: `src/routes/` 下每个文件是一个独立的 Hono 子应用，通过 `app.route('/', ...)` 挂载到根路径
 - **新增路由**: 在 `src/routes/` 创建文件，导出 Hono 实例，在 `src/index.ts` 中导入并挂载
 - **工具函数**: `src/utils/to.ts` — `to(promise)` 将 Promise 转为 `[err, data]` 元组，替代 try-catch
+- **静态资源**: `public/index.html` — API 接口文档页面，通过 `env.ASSETS` 绑定提供
+- **文档同步**: 每次 API 变动（新增/修改/删除路由或参数）必须同步更新 `public/index.html`
 - **无绑定**: 未配置 KV/D1/R2 等 Cloudflare 绑定
 - **无测试/lint/CI**
 
