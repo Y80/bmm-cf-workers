@@ -41,7 +41,7 @@ testUrl.get('/test-url', async (c) => {
   const timer = setTimeout(() => controller.abort(), 10_000)
 
   const [err, res] = await to(
-    http(result.data.url, { method: 'head', redirect: 'follow', signal: controller.signal, throwHttpErrors: false }),
+    http.head(result.data.url, { redirect: 'follow', signal: controller.signal, throwHttpErrors: false }),
   )
   clearTimeout(timer)
 
