@@ -4,39 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BMM API</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.6; padding: 2rem 1rem; }
-    .container { max-width: 48rem; margin: 0 auto; }
-    h1 { text-align: center; font-size: 1.875rem; margin-bottom: 2rem; }
-    .card { background: #fff; border-radius: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,.1); padding: 1.5rem; margin-bottom: 1.5rem; }
-    .card h2 { font-size: 1.25rem; color: #334155; margin-bottom: 0.5rem; }
-    .card p { color: #64748b; margin-bottom: 0.75rem; }
-    code, pre { background: #f1f5f9; border-radius: 0.375rem; padding: 0.75rem; font-size: 0.875rem; font-family: 'SF Mono', Menlo, monospace; overflow-x: auto; display: block; color: #334155; }
-    pre { margin-top: 0.75rem; }
-    table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; font-size: 0.875rem; }
-    th, td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid #e2e8f0; }
-    th { color: #64748b; font-weight: 600; }
-    .tag { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.125rem 0.5rem; border-radius: 9999px; }
-    .get { background: #dbeafe; color: #1d4ed8; }
-    .required { color: #dc2626; }
-    .optional { color: #64748b; }
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <div class="container">
-    <h1>BMM API</h1>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+  <div class="max-w-2xl w-full space-y-6">
+    <h1 class="text-3xl font-bold text-center text-gray-800">BMM API</h1>
 
-    <div class="card">
-      <h2><span class="tag get">GET</span> /test-url</h2>
-      <p>检测目标 URL 是否可访问，向目标发起 HEAD 请求（模拟 Chrome 浏览器），10s 超时。</p>
-      <table>
-        <tr><th>参数</th><th>说明</th></tr>
-        <tr><td><code style="display:inline">url</code> <span class="optional">可选</span></td><td>完整 URL，如 <code style="display:inline">https://example.com</code></td></tr>
-        <tr><td><code style="display:inline">host</code> <span class="optional">可选</span></td><td>域名，自动拼接 https://，如 <code style="display:inline">baidu.com</code></td></tr>
+    <div class="bg-white rounded-xl shadow p-6 space-y-4">
+      <h2 class="text-xl font-semibold text-gray-700">
+        <span class="text-xs font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full mr-1">GET</span>
+        /test-url
+      </h2>
+      <p class="text-gray-600">检测目标 URL 是否可访问，向目标发起 HEAD 请求（模拟 Chrome 浏览器），10s 超时。</p>
+      <table class="w-full text-sm">
+        <tr class="border-b border-gray-200"><th class="text-left py-2 pr-4 text-gray-500 font-semibold">参数</th><th class="text-left py-2 text-gray-500 font-semibold">说明</th></tr>
+        <tr class="border-b border-gray-200"><td class="py-2 pr-4"><code class="bg-gray-100 rounded px-1.5 py-0.5 text-sm">url</code> <span class="text-gray-400 text-xs">可选</span></td><td class="py-2">完整 URL，如 <code class="bg-gray-100 rounded px-1.5 py-0.5 text-sm">https://example.com</code></td></tr>
+        <tr class="border-b border-gray-200"><td class="py-2 pr-4"><code class="bg-gray-100 rounded px-1.5 py-0.5 text-sm">host</code> <span class="text-gray-400 text-xs">可选</span></td><td class="py-2">域名，自动拼接 https://，如 <code class="bg-gray-100 rounded px-1.5 py-0.5 text-sm">baidu.com</code></td></tr>
       </table>
-      <p style="margin-top:0.5rem;font-size:0.875rem;color:#64748b;">url 与 host 二选一，优先 url。</p>
-      <pre>// 2xx 成功
+      <p class="text-xs text-gray-400">url 与 host 二选一，优先 url。</p>
+      <pre class="bg-gray-100 rounded p-3 text-sm text-gray-800">// 2xx 成功
 {
   "ok": true,
   "status": 200,
@@ -57,14 +43,17 @@
 }</pre>
     </div>
 
-    <div class="card">
-      <h2><span class="tag get">GET</span> /fetch-html</h2>
-      <p>获取目标 URL 的 HTML 内容，向目标发起 GET 请求（模拟 Chrome 浏览器），返回响应体原文。</p>
-      <table>
-        <tr><th>参数</th><th>说明</th></tr>
-        <tr><td><code style="display:inline">url</code> <span class="required">必填</span></td><td>完整 URL</td></tr>
+    <div class="bg-white rounded-xl shadow p-6 space-y-4">
+      <h2 class="text-xl font-semibold text-gray-700">
+        <span class="text-xs font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full mr-1">GET</span>
+        /fetch-html
+      </h2>
+      <p class="text-gray-600">获取目标 URL 的 HTML 内容，向目标发起 GET 请求（模拟 Chrome 浏览器），返回响应体原文。</p>
+      <table class="w-full text-sm">
+        <tr class="border-b border-gray-200"><th class="text-left py-2 pr-4 text-gray-500 font-semibold">参数</th><th class="text-left py-2 text-gray-500 font-semibold">说明</th></tr>
+        <tr class="border-b border-gray-200"><td class="py-2 pr-4"><code class="bg-gray-100 rounded px-1.5 py-0.5 text-sm">url</code> <span class="text-red-500 text-xs">必填</span></td><td class="py-2">完整 URL</td></tr>
       </table>
-      <pre>// 成功：返回 text/plain 原文
+      <pre class="bg-gray-100 rounded p-3 text-sm text-gray-800">// 成功：返回 text/plain 原文
 &lt;!DOCTYPE html&gt;...
 
 // 缺少参数：400
