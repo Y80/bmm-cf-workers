@@ -9,4 +9,4 @@ const browserHeaders = {
   'Cache-Control': 'no-cache',
 }
 
-export const http = ky.create({ headers: browserHeaders })
+export const http = ky.create({ headers: browserHeaders, timeout: 30_000 })
