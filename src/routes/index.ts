@@ -3,6 +3,7 @@ import { html } from 'hono/html'
 
 const home = new Hono()
 
+/** API 首页，以 HTML 形式展示所有接口文档 */
 home.get('/', (c) => {
   return c.html(html`
     <!DOCTYPE html>
