@@ -20,12 +20,12 @@ home.get('/', (c) => {
 
         <div class="bg-white rounded-xl shadow p-6 space-y-4">
           <h2 class="text-xl font-semibold text-gray-700">GET /test-url</h2>
-          <p class="text-gray-600">检测 URL 是否可访问</p>
+          <p class="text-gray-600">检测 URL 是否可访问（支持 url 或 host 参数）</p>
           <code class="block bg-gray-100 rounded p-3 text-sm text-gray-800">
             GET /test-url?url=https://example.com
           </code>
           <pre class="bg-gray-100 rounded p-3 text-sm text-gray-800">{
-  "reachable": true,
+  "ok": true,
   "status": 200,
   "statusText": "OK"
 }</pre>
