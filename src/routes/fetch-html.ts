@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { z } from 'zod'
 import { to } from '../utils/to'
-import { http } from '../utils/http'
+import { http, webHeaders } from '../utils/http'
 
 /** 查询参数 */
 const querySchema = z.object({
@@ -21,7 +21,7 @@ fetchHtml.get('/fetch-html', async (c) => {
     return c.text(result.error.issues[0].message, 400)
   }
 
-  const [err, html] = await to(http.get(result.data.url).text())
+  const [err, html] = await to(http.get(result.data.url, { headers: webHeaders }).text())
   if (err) {
     return c.text(`Fetch failed: ${err}`, 502)
   }

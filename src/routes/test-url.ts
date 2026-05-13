@@ -2,7 +2,7 @@ import { Hono } from 'hono'
 import ky, { TimeoutError } from 'ky'
 import { z } from 'zod'
 import { to } from '../utils/to'
-import { http } from '../utils/http'
+import { http, webHeaders } from '../utils/http'
 
 /** 查询参数 */
 const querySchema = z.object({
@@ -39,7 +39,7 @@ testUrl.get('/test-url', async (c) => {
   }
 
   const [err, res] = await to(
-    http.head(result.data.url, { redirect: 'follow', timeout: 10_000, throwHttpErrors: false }),
+    http.head(result.data.url, { headers: webHeaders, redirect: 'follow', timeout: 10_000, throwHttpErrors: false }),
   )
 
   if (err) {
